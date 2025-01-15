@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Maker - LED Name Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            margin: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 400px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #output {
+            margin-top: 30px;
+        }
+
+        .letter-grid-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 20px);
+            grid-template-rows: repeat(8, 20px);
+            gap: 2px;
+            margin: 0 10px;
+        }
+
+        .led {
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            transition: background-color 0.3s;
+        }
+
+        .led.on {
+            background-color: #00ff00;
+        }
+
+        .binary-code {
+            font-family: monospace;
+            color: #00ff00;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LED Name Pattern Generator</h1>
+        <form id="nameForm">
+            <input type="text" id="nameInput" placeholder="Enter your name" required>
+            <button type="submit">Generate Patterns</button>
+        </form>
+        
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const patterns = {
+            S: [
+                0b01111111, 0b10000000, 0b10000000, 0b01111110, 0b00000001, 0b00000001, 0b10000001, 0b01111110
+            ],
+            H: [
+                0b10000001, 0b10000001, 0b10000001, 0b11111111, 0b10000001, 0b10000001, 0b10000001, 0b10000001
+            ],
+            O: [
+                0b00111100, 0b01000010, 0b10000001, 0b10000001, 0b10000001, 0b10000001, 0b01000010, 0b00111100
+            ],
+            V: [
+                0b10000001, 0b10000001, 0b01000010, 0b01000010, 0b00100100, 0b00100100, 0b00011000, 0b00011000
+            ],
+            I: [
+                0b00111100, 0b00001000, 0b00001000, 0b00001000, 0b00001000, 0b00001000, 0b00001000, 0b00111100
+            ],
+            N: [
+                0b10000001, 0b11000001, 0b10100001, 0b10010001, 0b10001001, 0b10000101, 0b10000011, 0b10000001
+            ],
+            // Add more letters as needed...
+        };
+
+        // Event listener for form submission
+        document.getElementById('nameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('nameInput').value.toUpperCase();
+            generatePatterns(name);
+        });
+
+        // Function to generate patterns for each letter in the name
+        function generatePatterns(name) {
+            const output = document.getElementById('output');
+            output.innerHTML = '';  // Clear previous output
+            
+            const letterGridContainer = document.createElement('div');
+            letterGridContainer.classList.add('letter-grid-container');
+
+            // Loop through each letter in the name
+            for (let i = 0; i < name.length; i++) {
+                const letter = name[i];
+                if (patterns[letter]) {
+                    const letterDiv = document.createElement('div');
+                    letterDiv.classList.add('letter');
+                    const grid = createLetterGrid(patterns[letter]);
+                    letterDiv.appendChild(grid);
+                    letterGridContainer.appendChild(letterDiv);
+
+                    // Create and display the binary code for the letter
+                    const binaryCode = createBinaryCode(patterns[letter]);
+                    const binaryDiv = document.createElement('div');
+                    binaryDiv.classList.add('binary-code');
+                    binaryDiv.textContent = binaryCode;
+                    letterDiv.appendChild(binaryDiv);
+                }
+            }
+
+            output.appendChild(letterGridContainer);
+        }
+
+        // Function to create a grid for a letter
+        function createLetterGrid(pattern) {
+            const grid = document.createElement('div');
+            grid.classList.add('letter-grid');
+            
+            // Loop through each row of the letter pattern
+            for (let i = 0; i < 8; i++) {
+                const row = pattern[i];
+                for (let j = 0; j < 8; j++) {
+                    const led = document.createElement('div');
+                    led.classList.add('led');
+                    if ((row >> (7 - j)) & 1) {
+                        led.classList.add('on');
+                    }
+                    grid.appendChild(led);
+                }
+            }
+            
+            return grid;
+        }
+
+        // Function to create the binary code for the letter
+        function createBinaryCode(pattern) {
+            return pattern.map(row => '0b' + row.toString(2).padStart(8, '0')).join(', ');
+        }
+    </script>
+</body>
+</html>
