@@ -201,7 +201,7 @@
             const pattern = patterns[letter];
             if (!pattern) return;
 
-            const binaryCode = pattern.map(byte => byte.toString(2).padStart(8, '0')).join(' ');
+            const binaryCode = `{${pattern.map(byte => byte.toString(2).padStart(8, '0')).join(' ,')}}`;
             return binaryCode;
         }
 
@@ -227,7 +227,6 @@
 
         function generatePatterns(event) {
             event.preventDefault();
-
             const name = document.getElementById('nameInput').value.toUpperCase();
             const outputDiv = document.getElementById('output');
             outputDiv.innerHTML = '';
