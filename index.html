@@ -48,13 +48,12 @@
         }
 
         #output {
-            margin-top: 30px;
-            display: flex;
-            overflow-x: auto;
-            justify-content: flex-start;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
+    display: flex;
+    flex-wrap: nowrap; /* Prevents wrapping */
+    overflow-x: auto; /* Allows horizontal scrolling if needed */
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 
         .letter-grid-container {
             display: flex;
