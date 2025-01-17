@@ -229,7 +229,8 @@ footer {
             const pattern = patterns[letter];
             if (!pattern) return;
 
-            const binaryCode = `{${pattern.map(byte => byte.toString(2).padStart(8, '0')).join(' ,')}}`;
+           // const binaryCode = `{${pattern.map(byte => byte.toString(2).padStart(8, '0')).join(' ,')}}`;
+const binaryCode = `{${pattern.map(byte => '0b' + byte.toString(2).padStart(8, '0')).join(' ,')}}`;
             return binaryCode;
         }
 
